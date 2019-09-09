@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block title %}Nadezda{% endblock %}
+{% block head %}
+	<link href="/static/style.css" rel="stylesheet">
+{% endblock %}
+{% block page_content %}
+
+		<p class="for_anon">{% if current_user.is_authenticated %} Hello! {% else %} Hello, please, Log in. {% endif %}</p>
+		<p class="for_jpg"><img src="/static/myicon.jpg"  width="320" height="160"  alt="Hello. Please, Log in."></p>
+
+{% endblock %}
+
+

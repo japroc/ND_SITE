@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Nadezda - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ user.username }}</h1>
+    {% if user.name or user.location %}
+    <p>
+        {% if user.name %}{{ user.name }}{% endif %}
+        {% if user.location %}
+            from <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
+        {% endif %}
+    </p>
+    {% endif %}
+    {% if current_user.is_administrator() %}
+    <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+    {% endif %}
+    {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+    <p>Member since {{ moment(user.member_since).format('L') }}. Last seen {{ moment(user.last_seen).fromNow() }}.</p> <p>Language: {{ user.language }}</p>
+    {% if user != current_user %}
+	{% if not chats_iss %}
+	<p> {{ wtf.quick_form(adds) }} </p>
+	{% else %}
+	<p><form action='/delete_chat/{{ user.id }}' method="POST" class="form" role="form">
+    <input type="submit" class="btn btn-default" value="Delete chat">
+	</form></p>
+	
+	
+	<!--<p> 
+<form action="" method="post" class="form" role="form">
+  <input id="csrf_token" name="csrf_token" type="hidden" value="ImQ0ZWVjMGNiY2QwODViMjAxN2Q4MDUwMzJkYmRmYjRkZDk4OTc4NDEi.D8YhMA.O2bNvZC92FErJtu1gjMakx2t_24">
+   <input class="btn btn-default" id="submit" name="submit" type="submit" value="Delete chat">
+</form> </p> -->
+	
+	
+	{% endif %}
+	{% endif %}
+	<p>
+        {% if user == current_user %}
+        <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
+        {% endif %}
+        {% if current_user.is_administrator() %}
+        <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">Edit Profile [Admin]</a>
+        {% endif %}
+    </p>
+</div>
+{% endblock %}
